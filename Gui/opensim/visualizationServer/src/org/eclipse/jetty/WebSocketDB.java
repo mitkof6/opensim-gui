@@ -41,7 +41,7 @@ public class WebSocketDB {
     static WebSocketDB instance;
     private Set<VisWebSocket> sockets = Collections.synchronizedSet(new HashSet<VisWebSocket>());
     private Observer observer;
-    public static boolean debug = false;
+    public static boolean debug = true;
     /** Creates a new instance of WebSocketDB */
     private WebSocketDB() {
         instance = this;
@@ -79,12 +79,17 @@ public class WebSocketDB {
     public void broadcastMessageJson(JSONObject msg, VisWebSocket specificSocket)
     {
         if (specificSocket != null){
+            String opString = (String) msg.get("Op");
+            if (debug && !"Frame".equalsIgnoreCase(opString)) 
+                System.out.println("Broadcast:"+msg.toJSONString()+"\n");
             specificSocket.sendVisualizerMessage(msg);
             return;
         }
         int i=0;
         for (VisWebSocket sock : sockets){
-            if (debug) System.out.println("Broadcast:"+msg.toJSONString()+"\n");
+            String opString = (String) msg.get("Op");
+            if (debug && !"Frame".equalsIgnoreCase(opString)) 
+                System.out.println("Broadcast:"+msg.toJSONString()+"\n");
             sock.sendVisualizerMessage(msg);
             i++;
         }

@@ -195,14 +195,13 @@ public class ExperimentalForceSetNode extends OpenSimNode {
             };
             ExplorerTopComponent.addUndoableEdit(auEdit);
         }       
-        ///motionDisplayer.setScaleFactor(newFactor);
+        motionDisplayer.setExperimentalForceScaleFactor(newFactor);
         ViewDB.repaintAll();
         refreshNode();
     }
 
     public double getForceScaleFactor()
     {
-        return 1.0;//forcesDisplayer.getScaleFactor();
+        return motionDisplayer.getExperimentalForceScaleFactor();
     }
-
 }

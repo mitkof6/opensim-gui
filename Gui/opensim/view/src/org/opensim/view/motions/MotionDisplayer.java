@@ -100,6 +100,7 @@ import vtk.vtkPolyDataMapper;
 
 public class MotionDisplayer {
 
+
     private double[] defaultForceColor = new double[]{0., 1.0, 0.};
     private Vec3 defaultForceColorVec3 = new Vec3(0., 1.0, 0.);
     private MuscleColoringFunction mcf=null;
@@ -1132,7 +1133,26 @@ public class MotionDisplayer {
             // Find first ExperimentalMarker and change its Material, this will affect all of them
             if (expObj instanceof ExperimentalMarker){
                 UUID expMarkerUUID = mapComponentToUUID.get(expObj).get(0); 
-                ViewDB.getInstance().applyScaleToObjectByUUID(model, expMarkerUUID, experimentalMarkerScaleFactor);  
+                ViewDB.getInstance().applyScaleToObjectByUUID(model, expMarkerUUID, experimentalMarkerScaleFactor, 1.0);  
+            }
+        }
+    }
+    
+    /**
+     * @return the experimentalForceScaleFactor
+     */
+    public double getExperimentalForceScaleFactor() {
+        return experimentalForceScaleFactor;
+    }
+    public void setExperimentalForceScaleFactor(double newFactor) {
+        double oldScaleFactor = this.experimentalForceScaleFactor;
+        this.experimentalForceScaleFactor = newFactor;
+        Set<OpenSimObject> expermintalDataObjects = mapComponentToUUID.keySet();
+        for (OpenSimObject expObj : expermintalDataObjects){
+            // Find first ExperimentalForce and scale it, this will affect all of them
+            if (expObj instanceof MotionObjectPointForce){
+                UUID expForceUUID = mapComponentToUUID.get(expObj).get(0); 
+                ViewDB.getInstance().applyScaleToObjectByUUID(model, expForceUUID, experimentalForceScaleFactor, oldScaleFactor);  
             }
         }
     }
